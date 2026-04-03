@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <setting propertyKey="@Properties.TeamIndex" title="Team">
+        <settingConfig type="list">
+            <listEntry value="0">India Men</listEntry>
+            <listEntry value="1">India Women</listEntry>
+            <listEntry value="2">Australia Men</listEntry>
+            <listEntry value="3">Australia Women</listEntry>
+            <listEntry value="4">England Men</listEntry>
+            <listEntry value="5">England Women</listEntry>
+            <listEntry value="6">New Zealand Men</listEntry>
+            <listEntry value="7">New Zealand Women</listEntry>
+            <listEntry value="8">South Africa Men</listEntry>
+            <listEntry value="9">South Africa Women</listEntry>
+            <listEntry value="10">Pakistan Men</listEntry>
+            <listEntry value="11">Pakistan Women</listEntry>
+            <listEntry value="12">Sri Lanka Men</listEntry>
+            <listEntry value="13">West Indies Men</listEntry>
+            <listEntry value="14">Bangladesh Men</listEntry>
+            <listEntry value="15">Afghanistan Men</listEntry>
+            <listEntry value="16">Zimbabwe Men</listEntry>
+            <listEntry value="17">Ireland Men</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.WorkerUrl" title="Worker URL">
+        <settingConfig type="alphaNumeric" />
+    </setting>
+</settings>

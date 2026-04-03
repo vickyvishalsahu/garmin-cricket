@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<properties>
+    <property id="TeamIndex" type="number">0</property>
+    <property id="WorkerUrl" type="string">http://localhost:8787</property>
+</properties>

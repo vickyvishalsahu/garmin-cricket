@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="AppName">Cricket Scores</string>
+    <string id="NoMatches">No recent matches</string>
+    <string id="Loading">Loading...</string>
+    <string id="ChangeTeam">Change team in\nGarmin Connect app</string>
+</strings>
