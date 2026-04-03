@@ -39,11 +39,23 @@ curl "http://localhost:8787/mock?team=IND_M&mode=completed"
 
 ### Watch
 
-Requires the [Garmin Connect IQ SDK](https://developer.garmin.com/connect-iq/sdk/) (v6.x+).
+Requires:
+- [Garmin Connect IQ SDK](https://developer.garmin.com/connect-iq/sdk/) (v6.x+) — install via the SDK Manager
+- Java runtime (`brew install --cask temurin`)
+- A developer key (generate once):
+  ```bash
+  openssl genrsa 4096 | openssl pkcs8 -topk8 -nocrypt -outform DER -out "$HOME/Library/Application Support/Garmin/ConnectIQ/developer_key.der"
+  ```
 
-Open `watch/` in VS Code with the [Monkey C extension](https://marketplace.visualstudio.com/items?itemName=garmin.monkey-c), select a target device, and run in the simulator (`Ctrl+F5`).
-
-Or build from the command line:
+From the `watch/` folder:
 ```bash
-monkeyc -f watch/monkey.jungle -d fenix7 -o watch/bin/CricketScores.prg
+make sim          # 1. Launch the simulator
+make run          # 2. Build and load the app
+```
+
+Other commands:
+```bash
+make build        # Compile only
+make clean        # Remove build output
+make run DEVICE=venu2   # Target a different device
 ```

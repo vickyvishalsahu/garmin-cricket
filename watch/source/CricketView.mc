@@ -19,8 +19,6 @@ class CricketView extends WatchUi.View {
         // Start foreground refresh timer (2 min)
         _timer = new Timer.Timer();
         _timer.start(method(:onFgTimer), FG_INTERVAL * 1000, true);
-        // Load mock data for simulator testing
-        loadMockData();
         // Kick off an immediate foreground fetch
         fetchScore();
     }
@@ -67,7 +65,7 @@ class CricketView extends WatchUi.View {
         var baseUrl = Properties.getValue("WorkerUrl") as String;
         var teamIndex = Properties.getValue("TeamIndex") as Number;
         var team = Teams.getCode(teamIndex);
-        var url = baseUrl + "/mock?team=" + team + "&mode=live";
+        var url = baseUrl + "/score?team=" + team;
         Communications.makeWebRequest(
             url,
             null,
