@@ -1,0 +1,12 @@
+# Garmin build output
+watch/bin/
+
+# Wrangler local state
+worker/.wrangler/
+
+# Node
+node_modules/
+
+# Secrets
+.env
+.dev.vars
