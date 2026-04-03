@@ -10,6 +10,7 @@ import Toybox.Communications;
 class CricketView extends WatchUi.View {
 
     var _timer as Timer.Timer?;
+    var _fetchFailed as Boolean = false;
 
     function initialize() {
         View.initialize();
@@ -21,33 +22,6 @@ class CricketView extends WatchUi.View {
         _timer.start(method(:onFgTimer), FG_INTERVAL * 1000, true);
         // Kick off an immediate foreground fetch
         fetchScore();
-    }
-
-    function loadMockData() as Void {
-        if (Storage.getValue("matchData") != null) {
-            return;
-        }
-        var mock = {
-            "team" => "IND_M",
-            "found" => true,
-            "match" => {
-                "status" => "live",
-                "type" => "t20",
-                "opponent" => "AUS",
-                "batting" => {
-                    "team" => "IND",
-                    "runs" => 142,
-                    "wickets" => 3,
-                    "overs" => "14.2"
-                },
-                "crr" => 9.9,
-                "rrr" => 10.4,
-                "target" => 188,
-                "result" => null
-            }
-        } as Dictionary;
-        Storage.setValue("matchData", mock);
-        Storage.setValue("lastFetch", Time.now().value());
     }
 
     function onHide() as Void {
@@ -81,6 +55,9 @@ class CricketView extends WatchUi.View {
         if (responseCode == 200 && data != null && data instanceof Dictionary) {
             Storage.setValue("matchData", data as Dictionary);
             Storage.setValue("lastFetch", Time.now().value());
+            _fetchFailed = false;
+        } else {
+            _fetchFailed = true;
         }
         WatchUi.requestUpdate();
     }
@@ -96,21 +73,26 @@ class CricketView extends WatchUi.View {
         var data = Storage.getValue("matchData") as Dictionary?;
         var teamIndex = Properties.getValue("TeamIndex") as Number;
         var team = Teams.getCode(teamIndex);
+        var teamName = Teams.getLabel(teamIndex);
 
         if (data == null || !(data instanceof Dictionary)) {
-            drawNoData(dc, cx, h, team);
+            if (_fetchFailed) {
+                drawError(dc, cx, h, teamName);
+            } else {
+                drawNoData(dc, cx, h, teamName);
+            }
             return;
         }
 
         var found = data.get("found");
         if (found == null || !found.equals(true)) {
-            drawNotFound(dc, cx, h, team);
+            drawNotFound(dc, cx, h, teamName);
             return;
         }
 
         var match = data.get("match") as Dictionary?;
         if (match == null) {
-            drawNotFound(dc, cx, h, team);
+            drawNotFound(dc, cx, h, teamName);
             return;
         }
 
@@ -125,20 +107,36 @@ class CricketView extends WatchUi.View {
         drawFooter(dc, cx, h);
     }
 
-    function drawNoData(dc as Dc, cx as Number, h as Number, team as String) as Void {
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, h / 2 - 20, Graphics.FONT_SMALL, teamLabel(team),
+    function drawNoData(dc as Dc, cx as Number, h as Number, teamName as String) as Void {
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, h / 2 - 20, Graphics.FONT_SMALL, teamName,
             Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(cx, h / 2 + 10, Graphics.FONT_TINY, "Loading...",
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, h / 2 + 10, Graphics.FONT_TINY, "Fetching scores...",
             Graphics.TEXT_JUSTIFY_CENTER);
     }
 
-    function drawNotFound(dc as Dc, cx as Number, h as Number, team as String) as Void {
+    function drawError(dc as Dc, cx as Number, h as Number, teamName as String) as Void {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, h / 2 - 20, Graphics.FONT_SMALL, teamLabel(team),
+        dc.drawText(cx, h / 2 - 30, Graphics.FONT_SMALL, teamName,
+            Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, h / 2, Graphics.FONT_TINY, "Could not connect",
+            Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, h / 2 + 25, Graphics.FONT_XTINY, "Press select to retry",
+            Graphics.TEXT_JUSTIFY_CENTER);
+    }
+
+    function drawNotFound(dc as Dc, cx as Number, h as Number, teamName as String) as Void {
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, h / 2 - 30, Graphics.FONT_SMALL, teamName,
             Graphics.TEXT_JUSTIFY_CENTER);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, h / 2 + 10, Graphics.FONT_TINY, "No recent matches",
+        dc.drawText(cx, h / 2, Graphics.FONT_TINY, "No recent matches",
+            Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, h / 2 + 25, Graphics.FONT_XTINY, "Press select to change team",
             Graphics.TEXT_JUSTIFY_CENTER);
     }
 
@@ -274,11 +272,4 @@ class CricketView extends WatchUi.View {
         }
     }
 
-    function teamLabel(code as String) as String {
-        var idx = code.find("_");
-        if (idx != null) {
-            return code.substring(0, idx);
-        }
-        return code;
-    }
 }

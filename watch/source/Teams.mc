@@ -17,10 +17,32 @@ module Teams {
         "IRE_M"
     ] as Array<String>;
 
+    var LABELS as Array<String> = [
+        "India Men",      "India Women",
+        "Australia Men",  "Australia Women",
+        "England Men",    "England Women",
+        "NZ Men",         "NZ Women",
+        "SA Men",         "SA Women",
+        "Pakistan Men",   "Pakistan Women",
+        "Sri Lanka Men",
+        "West Indies Men",
+        "Bangladesh Men",
+        "Afghanistan Men",
+        "Zimbabwe Men",
+        "Ireland Men"
+    ] as Array<String>;
+
     function getCode(index as Number) as String {
         if (index >= 0 && index < CODES.size()) {
             return CODES[index] as String;
         }
         return "IND_M";
+    }
+
+    function getLabel(index as Number) as String {
+        if (index >= 0 && index < LABELS.size()) {
+            return LABELS[index] as String;
+        }
+        return "India Men";
     }
 }

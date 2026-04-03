@@ -26,7 +26,7 @@ class CricketApp extends Application.AppBase {
     }
 
     function getInitialView() as [Views] or [Views, InputDelegates] {
-        return [new CricketView(), new CricketDelegate()];
+        return [new MainMenuView(), new MainMenuDelegate()];
     }
 
     function getServiceDelegate() as [System.ServiceDelegate] {

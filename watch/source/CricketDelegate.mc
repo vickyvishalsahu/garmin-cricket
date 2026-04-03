@@ -15,8 +15,15 @@ class CricketDelegate extends WatchUi.BehaviorDelegate {
     function onSelect() as Lang.Boolean {
         var view = WatchUi.getCurrentView();
         if (view[0] instanceof CricketView) {
-            (view[0] as CricketView).fetchScore();
+            var cv = view[0] as CricketView;
+            if (cv._fetchFailed) {
+                cv._fetchFailed = false;
+                cv.fetchScore();
+                WatchUi.requestUpdate();
+                return true;
+            }
         }
+        WatchUi.pushView(new TeamPickerView(), new TeamPickerDelegate(), WatchUi.SLIDE_UP);
         return true;
     }
 }
