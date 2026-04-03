@@ -80,6 +80,7 @@ export default {
       await setCache(env.SCORE_CACHE, teamCode, data);
       return json(data);
     } catch (err) {
+      console.error("Upstream error:", err);
       return json({ error: "Upstream fetch failed", detail: err.message }, 502);
     }
   },

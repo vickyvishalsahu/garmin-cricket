@@ -4,4 +4,4 @@ compatibility_date = "2024-01-01"
 
 [[kv_namespaces]]
 binding = "SCORE_CACHE"
-id = "YOUR_KV_NAMESPACE_ID"
+id = "db5798208691407fb9523be3d8a0b5f0"
