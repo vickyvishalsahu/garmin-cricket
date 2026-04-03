@@ -13,12 +13,12 @@ pnpm install
 
 Set the CricAPI key secret:
 ```bash
-wrangler secret put CRICAPI_KEY
+pnpm exec wrangler secret put CRICAPI_KEY
 ```
 
 Create a KV namespace and update `wrangler.toml` with the ID:
 ```bash
-wrangler kv namespace create SCORE_CACHE
+pnpm exec wrangler kv namespace create SCORE_CACHE
 ```
 
 Start the dev server:
